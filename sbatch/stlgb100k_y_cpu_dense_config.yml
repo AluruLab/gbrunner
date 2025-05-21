@@ -1,0 +1,16 @@
+device: "cpu"
+method: "stlgb"
+in_data:
+  data: "dense"
+  format: "ad"
+  ntop_genes: 10000
+  nsub_cells: 100000
+  tf_file: "data/pbmc/trrust_tf.txt"
+  h5ad_file: "data/rsc/h5/adata.raw.h5ad"
+regressor_args:
+  regressor: "stlgb"
+  n_jobs: 32
+  n_estimators: 5000
+  force_col_wise: true
+rstats_file: "networks/stlgb100k_y_cpu_dense_stats.json"
+network_file: "networks/stlgb100k_y_cpu_dense.csv"
