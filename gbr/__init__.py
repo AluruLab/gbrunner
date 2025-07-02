@@ -18,6 +18,10 @@ from pydantic import BaseModel
 from .data import ExpDataProcessor, NDFloatArray
 
 
+class NoneArgs(BaseModel):
+    regressor: t.Literal['none'] = 'none' 
+
+
 class XGBArgs(BaseModel):
     regressor: t.Literal['xgb'] = 'xgb' 
     learning_rate : float = 0.01
@@ -83,7 +87,8 @@ GBRArgs : t.TypeAlias = (
     SGBMArgs |
     STSGBMArgs |
     LGBArgs |
-    STLGBArgs
+    STLGBArgs |
+    NoneArgs
 )
 
 
@@ -102,7 +107,11 @@ Regressor : t.TypeAlias = (
 
 
 GBMethod = t.Literal[
-    'xgb', 'stxgb', 'sgbr', 'stsgbr', 'arb:default', 'arb:gbm', 'lgb', 'stlgb'
+    'xgb', 'stxgb',
+    'sgbr', 'stsgbr',
+    'lgb', 'stlgb',
+    'arb:default', 'arb:gbm',
+    'none',
 ]
 
 EARLY_STOP_WINDOW_LENGTH = 25
@@ -165,8 +174,8 @@ def gbrunner_args(method: GBMethod) -> GBRArgs:
             return XGBArgs()
         case 'arb:default' | 'arb:gbm':
             return XGBArgs()
-
-
+        case 'none':
+            return NoneArgs()
 
 
 def matrix_sub_row(

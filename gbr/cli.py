@@ -2,6 +2,7 @@ import argparse
 import typing
 import typing as t
 
+import pandas as pd
 import scanpy as sc
 import yaml
 #
@@ -30,6 +31,7 @@ class InputArgs(BaseModel):
     rstats_file: str = "./run_stats.json"
     network_file: str = "./network.csv"
     scdata_save_file: str | None = ""
+    tf_save_file: str | None = ""
 
 
 def run_grad_boost(rargs: InputArgs, exp_data: ExpDataProcessor):
@@ -45,6 +47,8 @@ def run_grad_boost(rargs: InputArgs, exp_data: ExpDataProcessor):
                 take_n=rargs.take_n, use_tqdm=rargs.use_tqdm
             )
             xgbr.dump(rargs.rstats_file, rargs.network_file)
+        case "none":
+            pass
 
 
 def gen_scd_network(rargs: InputArgs):
@@ -64,6 +68,12 @@ def gen_scd_network(rargs: InputArgs):
         return
     if rargs.scdata_save_file:
         sc_data.save(rargs.scdata_save_file)
+    if rargs.tf_save_file:
+        pd.DataFrame(data=sc_data.tf_list).to_csv(
+            rargs.tf_save_file,
+            index=False,
+            header=False
+        )
     sc_data.print()
     run_grad_boost(rargs, sc_data)
 
