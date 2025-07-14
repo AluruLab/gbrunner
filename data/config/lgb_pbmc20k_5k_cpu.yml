@@ -1,0 +1,12 @@
+device: "cpu"
+method: "lgb"
+in_data:
+  data: "dense"
+  format: "ad"
+  ntop_genes: 5000
+  nsub_cells: 25000
+  tf_file: "./data/meta/trrust_tf.txt"
+  h5ad_file: "./data/pbmc/rna_3p_chrx_ht_20K_n03/pre_processed.h5ad"
+take_n: 0
+rstats_file: "networks/pbmc20Ka/lgb20k_5k_cpu_dense_stats.json"
+network_file: "networks/pbmc20Ka/lgb20k_5k_cpu_dense.csv"

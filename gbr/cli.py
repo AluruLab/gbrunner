@@ -133,8 +133,8 @@ def parse_yaml(yaml_file: str):
         return yaml.safe_load(ymfx)
 
 
-def yaml_args(cmdargs: argparse.Namespace):
-    cfg_dict = parse_yaml(cmdargs.yaml_file)
+def yaml_args(yaml_file: str):
+    cfg_dict = parse_yaml(yaml_file)
     run_args = InputArgs.model_validate(cfg_dict)
     if run_args.method != run_args.regressor_args.regressor:
         run_args.regressor_args = gbrunner_args(run_args.method)
@@ -148,7 +148,7 @@ def yaml_args(cmdargs: argparse.Namespace):
 
 def input_args(cmdargs: argparse.Namespace):
     if cmdargs.format == "yaml":
-        return yaml_args(cmdargs)
+        return yaml_args(cmdargs.yaml_file)
     return cmd_args(cmdargs)
 
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     sc_data = SCDataArgs()
     def_args = InputArgs(in_data=sc_data)
     parser = argparse.ArgumentParser(
-        prog="grb.cli", description="Generate GRNs w. XGB/lightgbm for Single Cell Data"
+        prog="gbr.cli", description="Generate GRNs w. XGB/lightgbm for Single Cell Data"
     )
     #
     subparsers = parser.add_subparsers(
@@ -184,6 +184,7 @@ if __name__ == "__main__":
         choices=typing.get_args(GBMethod),
         default=def_args.method,
     )
+    csv_parser.add_argument("--take_n", default=0)
     csv_parser.add_argument("--rstats_out_file", default=def_args.rstats_file)
     csv_parser.add_argument("--out_file", default=def_args.network_file)
     #
@@ -210,12 +211,17 @@ if __name__ == "__main__":
     #
     yaml_parser = subparsers.add_parser("yaml", help="YAML File as Input")
     yaml_parser.add_argument(
-        "yaml_file", help="Yaml Input file with Data Configuration"
+        "yaml_file", 
+        help=f"Yaml Input file with a given configuration. Use 'schema' option to print schema"
     )
+    schema_parser = subparsers.add_parser("schema", help="Prints JSON schema for yaml config file")
     run_args = parser.parse_args()
-    print("--------------------")
-    print("Command line Arguments :: ")
-    pprint(run_args)
-    print("--------------------")
-    main(run_args)
-    print("--------------------")
+    if run_args.format == "schema":
+        pprint(InputArgs.model_json_schema())
+    else:
+        print("--------------------")
+        print("Command line Arguments :: ")
+        pprint(run_args)
+        print("--------------------")
+        main(run_args)
+        print("--------------------")

@@ -1,0 +1,479 @@
+{
+    "$defs": {
+        "CSVDataArgs": {
+            "properties": {
+                "format": {
+                    "const": "csv",
+                    "default": "csv",
+                    "title": "Format",
+                    "type": "string"
+                },
+                "csv_file": {
+                    "default": "",
+                    "title": "Csv File",
+                    "type": "string"
+                },
+                "nsub_cells": {
+                    "default": 0,
+                    "title": "Nsub Cells",
+                    "type": "integer"
+                }
+            },
+            "title": "CSVDataArgs",
+            "type": "object"
+        },
+        "LGBArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "lgb",
+                    "default": "lgb",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "n_estimators": {
+                    "default": 500,
+                    "title": "N Estimators",
+                    "type": "integer"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_jobs": {
+                    "default": 0,
+                    "title": "N Jobs",
+                    "type": "integer"
+                },
+                "verbosity": {
+                    "default": 0,
+                    "title": "Verbosity",
+                    "type": "integer"
+                },
+                "force_col_wise": {
+                    "default": false,
+                    "title": "Force Col Wise",
+                    "type": "boolean"
+                },
+                "force_row_wise": {
+                    "default": false,
+                    "title": "Force Row Wise",
+                    "type": "boolean"
+                },
+                "objective": {
+                    "default": "regression",
+                    "title": "Objective",
+                    "type": "string"
+                },
+                "importance_type": {
+                    "default": "gain",
+                    "title": "Importance Type",
+                    "type": "string"
+                }
+            },
+            "title": "LGBArgs",
+            "type": "object"
+        },
+        "NoneArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "none",
+                    "default": "none",
+                    "title": "Regressor",
+                    "type": "string"
+                }
+            },
+            "title": "NoneArgs",
+            "type": "object"
+        },
+        "SCDataArgs": {
+            "properties": {
+                "format": {
+                    "const": "ad",
+                    "default": "ad",
+                    "title": "Format",
+                    "type": "string"
+                },
+                "data": {
+                    "default": "dense",
+                    "enum": [
+                        "sparse",
+                        "dense"
+                    ],
+                    "title": "Data",
+                    "type": "string"
+                },
+                "tf_file": {
+                    "default": "./trrust_tf.txt",
+                    "title": "Tf File",
+                    "type": "string"
+                },
+                "h5ad_file": {
+                    "default": "./../rsc/h5/adata.raw.h5ad",
+                    "title": "H5Ad File",
+                    "type": "string"
+                },
+                "select_hvg": {
+                    "default": true,
+                    "title": "Select Hvg",
+                    "type": "integer"
+                },
+                "ntop_genes": {
+                    "default": 2000,
+                    "title": "Ntop Genes",
+                    "type": "integer"
+                },
+                "scale_regress": {
+                    "default": true,
+                    "title": "Scale Regress",
+                    "type": "boolean"
+                },
+                "nsub_cells": {
+                    "default": 0,
+                    "title": "Nsub Cells",
+                    "type": "integer"
+                }
+            },
+            "title": "SCDataArgs",
+            "type": "object"
+        },
+        "SGBMArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "sgbr",
+                    "default": "sgbr",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_estimators": {
+                    "default": 500,
+                    "title": "N Estimators",
+                    "type": "number"
+                },
+                "max_features": {
+                    "default": 0.1,
+                    "title": "Max Features",
+                    "type": "number"
+                },
+                "early_stop": {
+                    "default": false,
+                    "title": "Early Stop",
+                    "type": "boolean"
+                }
+            },
+            "title": "SGBMArgs",
+            "type": "object"
+        },
+        "STLGBArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "stlgb",
+                    "default": "stlgb",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "n_estimators": {
+                    "default": 500,
+                    "title": "N Estimators",
+                    "type": "integer"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_jobs": {
+                    "default": 0,
+                    "title": "N Jobs",
+                    "type": "integer"
+                },
+                "verbosity": {
+                    "default": 0,
+                    "title": "Verbosity",
+                    "type": "integer"
+                },
+                "force_col_wise": {
+                    "default": false,
+                    "title": "Force Col Wise",
+                    "type": "boolean"
+                },
+                "force_row_wise": {
+                    "default": false,
+                    "title": "Force Row Wise",
+                    "type": "boolean"
+                },
+                "colsample_bytree": {
+                    "default": 0.1,
+                    "title": "Colsample Bytree",
+                    "type": "number"
+                },
+                "objective": {
+                    "default": "regression",
+                    "title": "Objective",
+                    "type": "string"
+                },
+                "importance_type": {
+                    "default": "gain",
+                    "title": "Importance Type",
+                    "type": "string"
+                }
+            },
+            "title": "STLGBArgs",
+            "type": "object"
+        },
+        "STSGBMArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "stsgbr",
+                    "default": "stsgbr",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_estimators": {
+                    "default": 5000,
+                    "title": "N Estimators",
+                    "type": "number"
+                },
+                "max_features": {
+                    "default": 0.1,
+                    "title": "Max Features",
+                    "type": "number"
+                },
+                "subsample": {
+                    "default": 0.9,
+                    "title": "Subsample",
+                    "type": "number"
+                },
+                "early_stop": {
+                    "default": true,
+                    "title": "Early Stop",
+                    "type": "boolean"
+                }
+            },
+            "title": "STSGBMArgs",
+            "type": "object"
+        },
+        "STXGBArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "stxgb",
+                    "default": "stxgb",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_estimators": {
+                    "default": 500,
+                    "title": "N Estimators",
+                    "type": "integer"
+                },
+                "colsample_bytree": {
+                    "default": 0.2,
+                    "title": "Colsample Bytree",
+                    "type": "number"
+                },
+                "colsample_bynode": {
+                    "default": 0.5,
+                    "title": "Colsample Bynode",
+                    "type": "number"
+                },
+                "subsample": {
+                    "default": 0.9,
+                    "title": "Subsample",
+                    "type": "number"
+                }
+            },
+            "title": "STXGBArgs",
+            "type": "object"
+        },
+        "XGBArgs": {
+            "properties": {
+                "regressor": {
+                    "const": "xgb",
+                    "default": "xgb",
+                    "title": "Regressor",
+                    "type": "string"
+                },
+                "learning_rate": {
+                    "default": 0.01,
+                    "title": "Learning Rate",
+                    "type": "number"
+                },
+                "n_estimators": {
+                    "default": 500,
+                    "title": "N Estimators",
+                    "type": "integer"
+                }
+            },
+            "title": "XGBArgs",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "format": {
+            "default": "ad",
+            "enum": [
+                "ad",
+                "csv"
+            ],
+            "title": "Format",
+            "type": "string"
+        },
+        "method": {
+            "default": "xgb",
+            "enum": [
+                "xgb",
+                "stxgb",
+                "sgbr",
+                "stsgbr",
+                "lgb",
+                "stlgb",
+                "arb:default",
+                "arb:gbm",
+                "none"
+            ],
+            "title": "Method",
+            "type": "string"
+        },
+        "device": {
+            "default": "cpu",
+            "enum": [
+                "cpu",
+                "gpu"
+            ],
+            "title": "Device",
+            "type": "string"
+        },
+        "in_data": {
+            "discriminator": {
+                "mapping": {
+                    "ad": "#/$defs/SCDataArgs",
+                    "csv": "#/$defs/CSVDataArgs"
+                },
+                "propertyName": "format"
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/SCDataArgs"
+                },
+                {
+                    "$ref": "#/$defs/CSVDataArgs"
+                }
+            ],
+            "title": "In Data"
+        },
+        "regressor_args": {
+            "default": {
+                "regressor": "xgb",
+                "learning_rate": 0.01,
+                "n_estimators": 500
+            },
+            "discriminator": {
+                "mapping": {
+                    "lgb": "#/$defs/LGBArgs",
+                    "none": "#/$defs/NoneArgs",
+                    "sgbr": "#/$defs/SGBMArgs",
+                    "stlgb": "#/$defs/STLGBArgs",
+                    "stsgbr": "#/$defs/STSGBMArgs",
+                    "stxgb": "#/$defs/STXGBArgs",
+                    "xgb": "#/$defs/XGBArgs"
+                },
+                "propertyName": "regressor"
+            },
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/XGBArgs"
+                },
+                {
+                    "$ref": "#/$defs/STXGBArgs"
+                },
+                {
+                    "$ref": "#/$defs/SGBMArgs"
+                },
+                {
+                    "$ref": "#/$defs/STSGBMArgs"
+                },
+                {
+                    "$ref": "#/$defs/LGBArgs"
+                },
+                {
+                    "$ref": "#/$defs/STLGBArgs"
+                },
+                {
+                    "$ref": "#/$defs/NoneArgs"
+                }
+            ],
+            "title": "Regressor Args"
+        },
+        "take_n": {
+            "anyOf": [
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": 20,
+            "title": "Take N"
+        },
+        "use_tqdm": {
+            "default": true,
+            "title": "Use Tqdm",
+            "type": "boolean"
+        },
+        "rstats_file": {
+            "default": "./run_stats.json",
+            "title": "Rstats File",
+            "type": "string"
+        },
+        "network_file": {
+            "default": "./network.csv",
+            "title": "Network File",
+            "type": "string"
+        },
+        "scdata_save_file": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": "",
+            "title": "Scdata Save File"
+        },
+        "tf_save_file": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": "",
+            "title": "Tf Save File"
+        }
+    },
+    "required": [
+        "in_data"
+    ],
+    "title": "InputArgs",
+    "type": "object"
+}
