@@ -4,7 +4,7 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.13
+  - python=3.12
   - pip
   #
   - basedpyright
@@ -14,6 +14,7 @@ dependencies:
   - pandas
   - polars
   - pydantic
+  - pyyaml
   - scikit-learn
   - scipy
   - tqdm
