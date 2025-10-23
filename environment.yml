@@ -10,6 +10,8 @@ dependencies:
   - basedpyright
   - devtools
   - jupyter
+  - mpi4py
+  - openmpi-mpicc
   - numpy
   - pandas
   - polars
@@ -25,3 +27,4 @@ dependencies:
       - lightgbm
       - scanpy
       - xgboost
+      - git+https://github.com/srirampc/codetiming

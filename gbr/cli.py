@@ -9,14 +9,27 @@ import yaml
 from devtools import pprint
 from pydantic import BaseModel, Field
 
-from . import (ARBRunner, GBRunner, GBRArgs, GBMethod, XGBArgs,
-               gbrunner_args)
-from .data import (CSVDataArgs, CSVDataProcessor, ExpDataProcessor, SCDataArgs,
-                   SCDataProcessor)
+from . import (
+    ARBRunner,
+    GBRunner,
+    GBRArgs,
+    GBMethod,
+    XGBArgs,
+    gbrunner_args
+)
+from .data import (
+    CSVDataArgs,
+    CSVDataProcessor,
+    ExpDataProcessor,
+    SCDataArgs,
+    SCDataProcessor
+)
+
+from .util import parse_yaml
 
 #
 sc.settings.verbosity = 3
-sc.settings.set_figure_params(dpi=80, facecolor="white")
+sc.settings._set_figure_params(dpi=80, facecolor="white")
 sc.logging.print_header()
 
 
@@ -43,55 +56,54 @@ def run_grad_boost(rargs: InputArgs, exp_data: ExpDataProcessor):
         case "xgb" | "stxgb" | "sgbr" | "stsgbr" | "lgb" | "stlgb":
             xgbr = GBRunner(exp_data, rargs.device)
             xgbr.build(
-                rargs.method, rargs.regressor_args,
-                take_n=rargs.take_n, use_tqdm=rargs.use_tqdm
+                rargs.regressor_args,
+                take_n=rargs.take_n,
+                use_tqdm=rargs.use_tqdm
             )
             xgbr.dump(rargs.rstats_file, rargs.network_file)
         case "none":
             pass
 
 
-def gen_scd_network(rargs: InputArgs):
-    print("Run Arguments H5AD :: ", rargs)
-    sc_data = None
-    in_data: SCDataArgs = t.cast(SCDataArgs, rargs.in_data)
-    match in_data.data:
-        case "dense":
-            in_data.scale_regress = True
-            sc_data = SCDataProcessor(in_data)
-        case "sparse":
-            in_data.scale_regress = False
-            sc_data = SCDataProcessor(in_data)
-        case _:  # pyright: ignore[reportUnnecessaryComparison]
-            sc_data = None  # pyright: ignore[reportUnreachable]
-    if sc_data is None:
-        return
-    if rargs.scdata_save_file:
-        sc_data.save(rargs.scdata_save_file)
-    if rargs.tf_save_file:
-        pd.DataFrame(data=sc_data.tf_list).to_csv(
-            rargs.tf_save_file,
-            index=False,
-            header=False
-        )
-    sc_data.print()
-    run_grad_boost(rargs, sc_data)
-
-
-def gen_csv_network(rargs: InputArgs):
-    in_data: CSVDataArgs = t.cast(CSVDataArgs, rargs.in_data)
-    print("Run Arguments CSV :: ", in_data)
-    cv_data = CSVDataProcessor(in_data)
-    cv_data.print()
-    run_grad_boost(rargs, cv_data)
+def load_sc_data(rargs: InputArgs) -> ExpDataProcessor | None:
+    match rargs.format:
+        case "csv":
+            #
+            csv_data: CSVDataArgs = t.cast(CSVDataArgs, rargs.in_data)
+            print("Run Arguments CSV :: ", csv_data)
+            #
+            return CSVDataProcessor(csv_data)
+        case "ad":
+            #
+            print("Run Arguments H5AD :: ", rargs)
+            ad_data_args: SCDataArgs = t.cast(SCDataArgs, rargs.in_data)
+            #
+            sc_data: SCDataProcessor | None = None
+            match ad_data_args.data:
+                case "dense":
+                    ad_data_args.scale_regress = True
+                    sc_data = SCDataProcessor(ad_data_args)
+                case "sparse":
+                    ad_data_args.scale_regress = False
+                    sc_data = SCDataProcessor(ad_data_args)
+            if sc_data is None:
+                return sc_data  # pyright: ignore[reportUnreachable]
+            if rargs.scdata_save_file:
+                sc_data.save(rargs.scdata_save_file)
+            if rargs.tf_save_file:
+                pd.DataFrame(data=sc_data.tf_list).to_csv(
+                    rargs.tf_save_file,
+                    index=False,
+                    header=False
+                )
+            sc_data.print()
+            return sc_data
 
 
 def gen_network(rargs: InputArgs):
-    match rargs.format:
-        case "ad":
-            gen_scd_network(rargs)
-        case "csv":
-            gen_csv_network(rargs)
+    sc_data = load_sc_data(rargs)
+    if sc_data:
+        run_grad_boost(rargs, sc_data)
 
 
 def data_args(cmdargs: argparse.Namespace):
@@ -127,22 +139,11 @@ def cmd_args(cmdargs: argparse.Namespace):
         network_file=cmdargs.out_file,
     )
 
-
-def parse_yaml(yaml_file: str):
-    with open(yaml_file) as ymfx:
-        return yaml.safe_load(ymfx)
-
-
 def yaml_args(yaml_file: str):
     cfg_dict = parse_yaml(yaml_file)
     run_args = InputArgs.model_validate(cfg_dict)
     if run_args.method != run_args.regressor_args.regressor:
         run_args.regressor_args = gbrunner_args(run_args.method)
-    # if cmdargs.take_n > 0:
-    #     run_args.take_n=cmdargs.take_n
-    # run_args.use_tqdm=cmdargs.use_tqdm
-    # run_args.rstats_file=cmdargs.rstats_out_file
-    # run_args.network_file=cmdargs.out_file
     return run_args
 
 
